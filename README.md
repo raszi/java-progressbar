@@ -1,13 +1,12 @@
 # ProgressBar
 
-This is a simple console progressbar for java. It can be used in CLI programs
+This is a simple console progressbar for Java. It can be used in CLI programs
 to display progress for long tasks.
 
-### Example output
+It was born because I could not find a simple progress bar implementation
+for console based Java applications.
 
-```
-[==================================--------------------------]  57.00% 393ms
-```
+The inspiration came from visionmedia's [node-progress][1].
 
 ## Usage
 
@@ -20,6 +19,11 @@ progressBar.tick(25); // this will increase the percentage to 26
 progerssBar.finish(); // this will finish it
 ```
 
+### Example output
+
+```
+[==================================--------------------------]  57.00% 393ms
+```
 
 ## Advanced configuration
 
@@ -35,8 +39,10 @@ ProgressBar progressBar = ConsoleProgressBar.on(System.out)
  - `:elapsed` the elapsed time since the `start()` or the first `tick()`
  - `:percent` the percentage without the percent sign
  - `:eta` the estimated time to accomplish
- - `:total` the total elapsed time
+ - `:total` the total time to complete
 
 ## TODOs
 
  - it not checks whether the progressbar has been finished, so don't call `finish()` more than once
+
+[1]: https://github.com/visionmedia/node-progress
