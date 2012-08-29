@@ -26,7 +26,6 @@ progerssBar.finish(); // this will finish it
 ```java
 ProgressBar progressBar = ConsoleProgressBar.on(System.out)
     .withFormat("[:bar] :percent% :elapsed/:total ETA: :eta")
-    .withProgressBarWidth(70)
     .withTotalSteps(500);
 ```
 

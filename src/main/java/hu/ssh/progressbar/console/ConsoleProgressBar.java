@@ -10,6 +10,7 @@ import hu.ssh.progressbar.console.replacers.Replacer;
 import hu.ssh.progressbar.console.replacers.TotalTimeReplacer;
 
 import java.io.PrintStream;
+import java.util.Collection;
 import java.util.Set;
 
 import com.google.common.base.Preconditions;
@@ -34,8 +35,7 @@ import com.google.common.collect.ImmutableSet;
  *
  * <pre>
  * ProgressBar progressBar = ConsoleProgressBar.on(System.out)
- * 		.withFormat(&quot;[:bar]&quot;)
- * 		.withProgressBarWidth(70);
+ * 		.withFormat(&quot;[:bar]&quot;);
  * </pre>
  *
  * Or can be set to use custom number of steps instead of the default <code>100</code>:
@@ -55,20 +55,21 @@ public final class ConsoleProgressBar extends AbstractProgressBar {
 	public static final int DEFAULT_PROGRESSBAR_WIDTH = 60;
 	public static final long DEFAULT_STEPS = 100;
 
-	private final Set<Replacer> availableReplacers;
+	private final Set<Replacer> replacers;
 	private final PrintStream streamToUse;
 	private final String outputFormat;
-	private final int progressBarWidth;
 
 	private int previousLength = 0;
 
-	private ConsoleProgressBar(final PrintStream streamToUse, final String progressBarFormat, final int progressBarWidth,
-			final long totalSteps)
+	private ConsoleProgressBar(
+			final long totalSteps,
+			final PrintStream streamToUse,
+			final String progressBarFormat,
+			final Set<Replacer> replacers)
 	{
 		super(totalSteps);
 
-		this.progressBarWidth = progressBarWidth;
-		this.availableReplacers = getReplacers(progressBarWidth);
+		this.replacers = replacers;
 		this.streamToUse = streamToUse;
 		this.outputFormat = progressBarFormat;
 	}
@@ -83,7 +84,10 @@ public final class ConsoleProgressBar extends AbstractProgressBar {
 	public static ConsoleProgressBar on(final PrintStream streamToUse) {
 		Preconditions.checkNotNull(streamToUse);
 
-		return new ConsoleProgressBar(streamToUse, DEFAULT_FORMAT, DEFAULT_PROGRESSBAR_WIDTH, DEFAULT_STEPS);
+		return new ConsoleProgressBar(DEFAULT_STEPS,
+				streamToUse,
+				DEFAULT_FORMAT,
+				getDefaultReplacers(DEFAULT_PROGRESSBAR_WIDTH));
 	}
 
 	/**
@@ -96,28 +100,52 @@ public final class ConsoleProgressBar extends AbstractProgressBar {
 	public ConsoleProgressBar withFormat(final String outputFormat) {
 		Preconditions.checkNotNull(outputFormat);
 
-		return new ConsoleProgressBar(streamToUse, outputFormat, progressBarWidth, totalSteps);
+		return new ConsoleProgressBar(totalSteps,
+				streamToUse,
+				outputFormat,
+				replacers);
 	}
 
 	/**
 	 * Changes the total steps of the actual ProgressBar.
 	 *
 	 * @param totalSteps
-	 * @return
+	 *            the new total steps
+	 * @return a progress bar with the desired configuration
 	 */
 	public ConsoleProgressBar withTotalSteps(final int totalSteps) {
 		Preconditions.checkArgument(totalSteps != 0);
 
-		return new ConsoleProgressBar(streamToUse, outputFormat, progressBarWidth, totalSteps);
+		return new ConsoleProgressBar(totalSteps,
+				streamToUse,
+				outputFormat,
+				replacers);
 	}
 
-	public ConsoleProgressBar withProgressBarWidth(final int progressBarWidth) {
-		Preconditions.checkArgument(progressBarWidth != 0);
+	/**
+	 * Changes the replacers for the actual ProgressBar.
+	 *
+	 * @param replacers
+	 *            the new replacers to use
+	 * @return a progress bar with the desired configuration
+	 */
+	public ConsoleProgressBar withReplacers(final Collection<Replacer> replacers) {
+		Preconditions.checkNotNull(replacers);
 
-		return new ConsoleProgressBar(streamToUse, outputFormat, progressBarWidth, totalSteps);
+		return new ConsoleProgressBar(totalSteps,
+				streamToUse,
+				outputFormat,
+				ImmutableSet.copyOf(replacers));
 	}
 
-	private static Set<Replacer> getReplacers(final int progressBarWidth) {
+	/**
+	 * Gets the default replacers.
+	 *
+	 * @param progressBarWidth
+	 *            the width of the progress bar
+	 * @return the configured replacers
+	 */
+	public static Set<Replacer> getDefaultReplacers(final int progressBarWidth) {
 		return ImmutableSet.of(
 				new BarReplacer(progressBarWidth),
 				new PercentageReplacer(),
@@ -144,7 +172,7 @@ public final class ConsoleProgressBar extends AbstractProgressBar {
 	private String getActualProgressBar(final Progress progress) {
 		String bar = outputFormat;
 
-		for (final Replacer replacer : availableReplacers) {
+		for (final Replacer replacer : replacers) {
 			final String identifier = replacer.getReplaceIdentifier();
 
 			if (!bar.contains(identifier)) {
