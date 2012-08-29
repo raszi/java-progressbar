@@ -51,9 +51,10 @@ public final class ConsoleProgressBar extends AbstractProgressBar {
 	public static final char LINE_FEED = '\n';
 	public static final char CARRIAGE_RETURN = '\r';
 
+	public static final long DEFAULT_STEPS = 100;
 	public static final String DEFAULT_FORMAT = "[:bar] :percent% :eta";
 	public static final int DEFAULT_PROGRESSBAR_WIDTH = 60;
-	public static final long DEFAULT_STEPS = 100;
+	private static final Set<Replacer> DEFAULT_REPLACERS = getDefaultReplacers(DEFAULT_PROGRESSBAR_WIDTH);
 
 	private final Set<Replacer> replacers;
 	private final PrintStream streamToUse;
@@ -62,8 +63,8 @@ public final class ConsoleProgressBar extends AbstractProgressBar {
 	private int previousLength = 0;
 
 	private ConsoleProgressBar(
-			final long totalSteps,
 			final PrintStream streamToUse,
+			final long totalSteps,
 			final String progressBarFormat,
 			final Set<Replacer> replacers)
 	{
@@ -84,10 +85,10 @@ public final class ConsoleProgressBar extends AbstractProgressBar {
 	public static ConsoleProgressBar on(final PrintStream streamToUse) {
 		Preconditions.checkNotNull(streamToUse);
 
-		return new ConsoleProgressBar(DEFAULT_STEPS,
-				streamToUse,
+		return new ConsoleProgressBar(streamToUse,
+				DEFAULT_STEPS,
 				DEFAULT_FORMAT,
-				getDefaultReplacers(DEFAULT_PROGRESSBAR_WIDTH));
+				DEFAULT_REPLACERS);
 	}
 
 	/**
@@ -100,8 +101,8 @@ public final class ConsoleProgressBar extends AbstractProgressBar {
 	public ConsoleProgressBar withFormat(final String outputFormat) {
 		Preconditions.checkNotNull(outputFormat);
 
-		return new ConsoleProgressBar(totalSteps,
-				streamToUse,
+		return new ConsoleProgressBar(streamToUse,
+				totalSteps,
 				outputFormat,
 				replacers);
 	}
@@ -116,8 +117,8 @@ public final class ConsoleProgressBar extends AbstractProgressBar {
 	public ConsoleProgressBar withTotalSteps(final int totalSteps) {
 		Preconditions.checkArgument(totalSteps != 0);
 
-		return new ConsoleProgressBar(totalSteps,
-				streamToUse,
+		return new ConsoleProgressBar(streamToUse,
+				totalSteps,
 				outputFormat,
 				replacers);
 	}
@@ -132,8 +133,8 @@ public final class ConsoleProgressBar extends AbstractProgressBar {
 	public ConsoleProgressBar withReplacers(final Collection<Replacer> replacers) {
 		Preconditions.checkNotNull(replacers);
 
-		return new ConsoleProgressBar(totalSteps,
-				streamToUse,
+		return new ConsoleProgressBar(streamToUse,
+				totalSteps,
 				outputFormat,
 				ImmutableSet.copyOf(replacers));
 	}
