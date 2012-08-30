@@ -43,6 +43,7 @@ ProgressBar progressBar = ConsoleProgressBar.on(System.out)
 
 ## TODOs
 
- - it not checks whether the progressbar has been finished, so don't call `finish()` more than once
+ - it does not check whether the progressbar has been finished or not, so don't
+   call `finish()` more than once
 
 [1]: https://github.com/visionmedia/node-progress
