@@ -1,6 +1,5 @@
 package hu.ssh.test.progressbar.console;
 
-import hu.ssh.progressbar.ProgressBar;
 import hu.ssh.progressbar.console.ConsoleProgressBar;
 
 import java.io.ByteArrayOutputStream;
@@ -32,7 +31,7 @@ public class TestConsoleProgressBar {
 		final ByteArrayOutputStream outputstream = new ByteArrayOutputStream();
 
 		try {
-			final ProgressBar progressBar = ConsoleProgressBar.on(new PrintStream(outputstream))
+			final ConsoleProgressBar progressBar = ConsoleProgressBar.on(new PrintStream(outputstream))
 					.withFormat(":percent");
 
 			for (final Object[] params : getTestCases()) {

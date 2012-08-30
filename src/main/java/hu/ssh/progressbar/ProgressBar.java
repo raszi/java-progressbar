@@ -1,11 +1,12 @@
 package hu.ssh.progressbar;
 
+
 /**
  * Defines the main interfaces to work with a progressbar.
- * 
+ *
  * @author KARASZI István (github@spam.raszi.hu)
  */
-public interface ProgressBar {
+public interface ProgressBar<T extends ProgressBar<?>> {
 	/**
 	 * Starts the progress bar.
 	 */
@@ -33,4 +34,13 @@ public interface ProgressBar {
 	 * Finish the progressbar.
 	 */
 	void complete();
+
+	/**
+	 * Changes the total steps of the actual ProgressBar.
+	 * 
+	 * @param totalSteps
+	 *            the new total steps
+	 * @return a progress bar with the desired configuration
+	 */
+	T withTotalSteps(int totalSteps);
 }

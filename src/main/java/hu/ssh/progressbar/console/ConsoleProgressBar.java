@@ -47,7 +47,7 @@ import com.google.common.collect.ImmutableSet;
  *
  * @author KARASZI István (github@spam.raszi.hu)
  */
-public final class ConsoleProgressBar extends AbstractProgressBar {
+public final class ConsoleProgressBar extends AbstractProgressBar<ConsoleProgressBar> {
 	public static final char LINE_FEED = '\n';
 	public static final char CARRIAGE_RETURN = '\r';
 
@@ -107,13 +107,7 @@ public final class ConsoleProgressBar extends AbstractProgressBar {
 				replacers);
 	}
 
-	/**
-	 * Changes the total steps of the actual ProgressBar.
-	 *
-	 * @param totalSteps
-	 *            the new total steps
-	 * @return a progress bar with the desired configuration
-	 */
+	@Override
 	public ConsoleProgressBar withTotalSteps(final int totalSteps) {
 		Preconditions.checkArgument(totalSteps != 0);
 
