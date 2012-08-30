@@ -8,6 +8,8 @@ for console based Java applications.
 
 The inspiration came from visionmedia's [node-progress][1].
 
+[![Build Status](https://secure.travis-ci.org/raszi/java-progressbar.png?branch=master)](http://travis-ci.org/raszi/java-progressbar)
+
 ## Usage
 
 ```java
