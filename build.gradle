@@ -7,8 +7,8 @@ repositories {
 }
 
 dependencies {
-	compile group: 'com.google.guava', name: 'guava', version: '13.0.1'
-	testCompile group: 'org.testng', name: 'testng', version: '6.2.1'
+	compile group: 'com.google.guava', name: 'guava', version: '19.0'
+	testCompile group: 'org.testng', name: 'testng', version: '6.9.10'
 }
 
 test {
