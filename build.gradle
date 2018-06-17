@@ -1,4 +1,5 @@
 apply plugin: 'java'
+apply plugin: 'maven'
 
 compileJava.options.encoding = 'UTF-8'
 
@@ -14,13 +15,5 @@ dependencies {
 test {
 	useTestNG() {
 		suites 'testng.xml' 
-	}
-}
-
-uploadArchives {
-	repositories {
-		flatDir {
-			dirs 'repos'
-		}
 	}
 }
