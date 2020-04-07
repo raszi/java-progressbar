@@ -1,4 +1,8 @@
-apply plugin: 'java'
+plugins {
+	id 'java'
+	id 'maven-publish'
+	id 'signing'
+}
 
 compileJava.options.encoding = 'UTF-8'
 
@@ -17,10 +21,22 @@ test {
 	}
 }
 
-uploadArchives {
-	repositories {
-		flatDir {
-			dirs 'repos'
+publishing {
+	publications {
+		maven(MavenPublication) {
+			groupId = 'hu.ssh'
+			artifactId = 'java-progressbar'
+			version = '0.1.0'
+
+			from components.java
 		}
 	}
+}
+
+signing {
+	sign(publishing.publications["maven"])
+	def signingKeyId = findProperty("signingKeyId")
+	def signingKey = findProperty("signingKey")
+	def signingPassword = findProperty("signingPassword")
+	useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
 }
