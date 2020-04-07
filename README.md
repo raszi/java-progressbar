@@ -8,7 +8,16 @@ for console based Java applications.
 
 The inspiration came from visionmedia's [node-progress][1].
 
-[![Build Status](https://secure.travis-ci.org/raszi/java-progressbar.png?branch=master)](http://travis-ci.org/raszi/java-progressbar)
+[![Build Status](https://travis-ci.org/raszi/java-progressbar.svg?branch=master)](https://travis-ci.org/raszi/java-progressbar)
+[![Maven Central](https://img.shields.io/maven-central/v/hu.ssh/java-progressbar.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22hu.ssh%22%20AND%20a:%22java-progressbar%22)
+
+```xml
+<dependency>
+  <groupId>hu.ssh</groupId>
+  <artifactId>java-progressbar</artifactId>
+  <version>0.1.0</version>
+</dependency>
+```
 
 ## Usage
 
