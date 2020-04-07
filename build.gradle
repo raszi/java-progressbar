@@ -1,4 +1,11 @@
-apply plugin: 'java'
+plugins {
+	id 'java'
+	id 'maven-publish'
+	id 'signing'
+}
+
+group = 'hu.ssh'
+version = '0.1.0'
 
 compileJava.options.encoding = 'UTF-8'
 
@@ -17,10 +24,60 @@ test {
 	}
 }
 
-uploadArchives {
+java {
+	withJavadocJar()
+	withSourcesJar()
+}
+
+publishing {
 	repositories {
-		flatDir {
-			dirs 'repos'
+		maven {
+			def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+			def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots"
+			url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+			credentials {
+				username = System.getenv("NEXUS_USER")
+				password = System.getenv("NEXUS_PASSWORD")
+			}
 		}
 	}
+	publications {
+		maven(MavenPublication) {
+			from components.java
+
+			pom {
+				name = "$groupId:$artifactId"
+				description = 'A simple console progressbar for Java'
+				url = 'https://github.com/raszi/java-progressbar'
+				licenses {
+					license {
+						name = 'MIT License'
+						url = 'https://opensource.org/licenses/MIT'
+						distribution = 'repo'
+					}
+				}
+				developers {
+					developer {
+						id = 'raszi'
+						name = 'Istvan Karaszi'
+						email = 'github@spam.raszi.hu'
+						url = 'https://github.com/raszi'
+					}
+				}
+				scm {
+					connection = 'scm:git:git://github.com/raszi/java-progressbar.git'
+					developerConnection = 'scm:git:ssh://github.com/raszi/java-progressbar.git'
+					url = 'https://github.com/raszi/java-progressbar'
+				}
+			}
+		}
+	}
+}
+
+signing {
+	sign publishing.publications.maven
+	def signingKeyId = findProperty("signingKeyId")
+	def signingKey = findProperty("signingKey")
+	def signingPassword = findProperty("signingPassword")
+	useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
 }
