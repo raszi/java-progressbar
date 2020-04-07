@@ -32,7 +32,6 @@ java {
 publishing {
 	publications {
 		maven(MavenPublication) {
-//			artifactId = 'java-progressbar'
 			from components.java
 
 			pom {
