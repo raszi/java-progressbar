@@ -4,6 +4,9 @@ plugins {
 	id 'signing'
 }
 
+group = 'hu.ssh'
+version = '0.1.0'
+
 compileJava.options.encoding = 'UTF-8'
 
 repositories {
@@ -21,20 +24,48 @@ test {
 	}
 }
 
+java {
+	withJavadocJar()
+	withSourcesJar()
+}
+
 publishing {
 	publications {
 		maven(MavenPublication) {
-			groupId = 'hu.ssh'
-			artifactId = 'java-progressbar'
-			version = '0.1.0'
-
+//			artifactId = 'java-progressbar'
 			from components.java
+
+			pom {
+				name = "$groupId:$artifactId"
+				description = 'A simple console progressbar for Java'
+				url = 'https://github.com/raszi/java-progressbar'
+				licenses {
+					license {
+						name = 'MIT License'
+						url = 'https://opensource.org/licenses/MIT'
+						distribution = 'repo'
+					}
+				}
+				developers {
+					developer {
+						id = 'raszi'
+						name = 'Istvan Karaszi'
+						email = 'github@spam.raszi.hu'
+						url = 'https://github.com/raszi'
+					}
+				}
+				scm {
+					connection = 'scm:git:git://github.com/raszi/java-progressbar.git'
+					developerConnection = 'scm:git:ssh://github.com/raszi/java-progressbar.git'
+					url = 'https://github.com/raszi/java-progressbar'
+				}
+			}
 		}
 	}
 }
 
 signing {
-	sign(publishing.publications["maven"])
+	sign publishing.publications.maven
 	def signingKeyId = findProperty("signingKeyId")
 	def signingKey = findProperty("signingKey")
 	def signingPassword = findProperty("signingPassword")
